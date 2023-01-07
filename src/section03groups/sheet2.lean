@@ -39,6 +39,8 @@ namespace myweakgroup
 
 variables {G : Type} [myweakgroup G] (a b c : G)
 
+attribute [simp] mul_assoc one_mul inv_mul_self 
+
 /-
 
 One way of doing it: try proving 
@@ -52,6 +54,12 @@ and then
 first.
 
 -/
+
+lemma mul_left_cancel {a b c : G}(h: a * b = a * c) : 
+ b=c :=
+begin
+  
+end
 
 lemma mul_one (a : G) : a * 1 = a :=
 begin

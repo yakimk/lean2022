@@ -87,7 +87,8 @@ lemma mul_eq_one_iff_eq_inv : a * b = 1 ↔ a⁻¹ = b :=
 begin
   split;
   intro q,
-  {sorry},
+  {have w: b*b⁻¹=1, rw mul_inv_self,have e: a*(b*b⁻¹)=(a*b)*b⁻¹,{rw mul_assoc,},
+sorry,},--rw [left_inv_eq_right_inv (a b)(q,w)] },
   {cases q, rw <- mul_inv_self,}
 end
 
@@ -118,14 +119,17 @@ confluent rewrite system for group theory!
 -/
 -- example of Knuth-Bendix theorem
 example (G : Type) [mygroup G] (a b : G) : 
-  (b⁻¹ * a⁻¹)⁻¹ * 1⁻¹⁻¹ * b⁻¹ * (a⁻¹ * a⁻¹⁻¹⁻¹) * a = 1 := by simp[]
+  (b⁻¹ * a⁻¹)⁻¹ * 1⁻¹⁻¹ * b⁻¹ * (a⁻¹ * a⁻¹⁻¹⁻¹) * a = 1 := by simp
 
 -- bonus puzzle : if g^2=1 for all g in G, then G is abelian
 example (G : Type) [mygroup G] (h : ∀ g : G, g * g = 1) :
   ∀ g h : G, g * h = h * g :=
 begin
-  intros g i,specialize h g, have w: g⁻¹ =g,simp [<- mul_eq_one_iff_eq_inv],exact h,
-  sorry,
+  simp [mul_eq_one_iff_eq_inv] at h,
+  intros a b,
+  rw [<- h (a*b)],
+  rw mul_inv_rev,
+  simp [h],
 end
 
 end mygroup
