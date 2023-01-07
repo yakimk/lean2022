@@ -28,49 +28,49 @@ variables (P Q R : Prop)
 
 example : P ∧ Q → P :=
 begin
-  sorry
+  intro q,cases q,assumption,
 end
 
 example : P ∧ Q → Q :=
 begin
-  sorry
+  intro q,cases q,assumption,
 end
 
 example : (P → Q → R) → (P ∧ Q → R) :=
 begin
-  sorry
+  intros q w,apply q,cases w,assumption,cases w, assumption,
 end
 
 example : P → Q → P ∧ Q :=
 begin
-  sorry
+  intros q w, split, assumption,assumption,
 end
 
 /-- `∧` is symmetric -/
 example : P ∧ Q → Q ∧ P :=
 begin
-  sorry
+  intro q,cases q,split ,assumption, assumption,
 end
 
 example : P → P ∧ true :=
 begin
-  sorry
+  intro q,split,assumption,triv,
 end
 
 example : false → P ∧ false :=
 begin
-  sorry
+  intro q,split ,by_contra,triv,triv,
 end
 
 /-- `∧` is transitive -/
 example : (P ∧ Q) → (Q ∧ R) → (P ∧ R) :=
 begin
-  sorry,
+  intros q w,split, cases q,assumption,cases w,assumption,
 end
 
 example : ((P ∧ Q) → R) → (P → Q → R) :=
 begin
-  sorry,
+  intros q w e,apply q,split, assumption ,assumption,
 end
 
 

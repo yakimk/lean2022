@@ -8,7 +8,7 @@ import tactic -- imports all the Lean tactics
 
 /-!
 
-# Logic in Lean, example sheet 3 : "not" (`¬`)
+# Logic in Lean, example sheet 3 : "not" (`¬`) 
 
 We learn about how to manipulate `¬ P` in Lean.
 
@@ -35,55 +35,55 @@ variables (P Q R : Prop)
 
 example : ¬ true → false :=
 begin
-  sorry
+  intro q, change true->false at q,apply q,triv,
 end
 
 example : false → ¬ true :=
 begin
-  sorry
+  intro q, by_contra, triv,
 end
 
 example : ¬ false → true :=
 begin
-  sorry
+  intro q,triv,
 end
 
 example : true → ¬ false :=
 begin
-  sorry
+  intros q w,triv,
 end
 
 example : false → ¬ P :=
 begin
-  sorry
+  intro q,change P->false,intro w,triv,
 end
 
 example : P → ¬ P → false :=
 begin
-  sorry
+  intro q, triv,
 end
 
 example : P → ¬ (¬ P) :=
 begin
-  sorry
+  intro q,change ¬ P ->false,triv,
 end
 
 example : (P → Q) → (¬ Q → ¬ P) :=
 begin
-  sorry
+  intros q w e, apply w,apply q,assumption,
 end
 
 example : ¬ ¬ false → false :=
 begin
-  sorry
+  intro q, apply q,intro w,triv,
 end
 
 example : ¬ ¬ P → P :=
 begin
-  sorry
+  intro q,by_contra,apply q,triv,
 end
 
 example : (¬ Q → ¬ P) → (P → Q) :=
 begin
-  sorry,
+  intro q,intro w,by_cases Q,{assumption},{by_contra, apply q,{assumption},{assumption}}
 end

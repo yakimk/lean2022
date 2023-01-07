@@ -31,7 +31,9 @@ Good luck!
 theorem tendsto_thirtyseven_mul (a : ℕ → ℝ) (t : ℝ) (h : tendsto a t) :
   tendsto (λ n, 37 * a n) (37 * t) :=
 begin
-  sorry,
+  rw tendsto at *,intros,specialize h (ε/37) (by linarith),cases h with B h,use B,intros n α,specialize h n α,
+  rw <-mul_sub,rw abs_mul,rw abs_of_nonneg,
+  {linarith,},linarith,
 end
 
 /-- If `a(n)` tends to `t` and `c` is a positive constant then
@@ -39,7 +41,8 @@ end
 theorem tendsto_pos_const_mul {a : ℕ → ℝ} {t : ℝ} (h : tendsto a t)
   {c : ℝ} (hc : 0 < c) : tendsto (λ n, c * a n) (c * t) :=
 begin
-  sorry,
+  rw tendsto at *, intros,obtain ⟨B,x⟩ := h (ε/c)(div_pos H hc),use B,intros n α,
+  specialize x n α,rw [<-mul_sub, abs_mul, abs_of_nonneg],exact (lt_div_iff' hc).mp x,linarith,
 end
 
 /-- If `a(n)` tends to `t` and `c` is a negative constant then
@@ -47,7 +50,9 @@ end
 theorem tendsto_neg_const_mul {a : ℕ → ℝ} {t : ℝ} (h : tendsto a t)
   {c : ℝ} (hc : c < 0) : tendsto (λ n, c * a n) (c * t) :=
 begin
-  sorry,
+  have q: 0< -c,simp,exact hc,
+  intros ε e,obtain ⟨B,x⟩ := h (ε/ -c)(div_pos e q),use B,intros n ineq, simp,
+  rw [<- mul_sub, abs_mul,abs_of_neg],specialize x n ineq,exact (lt_div_iff' q).mp x,assumption,
 end
 
 /-- If `a(n)` tends to `t` and `c` is a constant then `c * a(n)` tends
@@ -55,7 +60,10 @@ to `c * t`. -/
 theorem tendsto_const_mul {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : tendsto a t) :
   tendsto (λ n, c * a n) (c * t) :=
 begin
-  sorry,
+  obtain (q|rfl|q) := lt_trichotomy 0 c,
+  {exact tendsto_pos_const_mul h q},
+  {simpa using tendsto_const 0},
+  {exact tendsto_neg_const_mul h q},
 end
 
 /-- If `a(n)` tends to `t` and `c` is a constant then `a(n) * c` tends
@@ -63,7 +71,7 @@ to `t * c`. -/
 theorem tendsto_mul_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : tendsto a t) :
   tendsto (λ n, a n * c) (t * c) :=
 begin
-  sorry
+  simpa [mul_comm] using tendsto_const_mul c h,
 end
 
 -- another proof of this result, showcasing some tactics
@@ -84,14 +92,14 @@ theorem tendsto_of_tendsto_sub {a b : ℕ → ℝ} {t u : ℝ}
   (h1 : tendsto (λ n, a n - b n) t) (h2 : tendsto b u) :
   tendsto a (t+u) :=
 begin
-  sorry,
+  simpa using tendsto_add h1 h2,
 end
 
 /-- If `a(n)` tends to `t` then `a(n)-t` tends to `0`. -/
 theorem tendsto_sub_lim {a : ℕ → ℝ} {t : ℝ}
   (h : tendsto a t) : tendsto (λ n, a n - t) 0 :=
 begin
-  sorry,
+  simpa using tendsto_sub h (tendsto_const t),
 end
 
 /-- If `a(n)` and `b(n)` both tend to zero, then their product tends
@@ -100,7 +108,15 @@ theorem tendsto_zero_mul_tendsto_zero
   {a b : ℕ → ℝ} (ha : tendsto a 0) (hb : tendsto b 0) :
   tendsto (λ n, a n * b n) 0 :=
 begin
-  sorry,
+  intros ε hε,
+  obtain ⟨X, hX⟩ := ha ε hε, 
+  obtain ⟨Y, hY⟩ := hb 1 zero_lt_one,
+  use max X Y,
+  intros n hn,
+  specialize hX n (le_of_max_le_left hn),
+  specialize hY n (le_of_max_le_right hn),
+  simpa [abs_mul] using mul_lt_mul'' hX hY _ _;
+  exact abs_nonneg _,
 end
 
 /-- If `a(n)` tends to `t` and `b(n)` tends to `u` then
@@ -108,7 +124,7 @@ end
 theorem tendsto_mul (a b : ℕ → ℝ) (t u : ℝ) (ha : tendsto a t)
   (hb : tendsto b u) : tendsto (λ n, a n * b n) (t * u) :=
 begin
-  sorry,
+  
 end
 
 -- something we never used!

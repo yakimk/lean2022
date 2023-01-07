@@ -12,7 +12,10 @@ import solutions.section02reals.sheet3 -- import the definition of `tendsto` fro
 theorem tendsto_neg {a : ℕ → ℝ} {t : ℝ} (ha : tendsto a t) :
   tendsto (λ n, - a n) (-t) :=
 begin
-  sorry,
+  rw tendsto at *,
+  have q: ∀n, |a n -  t|=| -a n- -t|,
+  {intro,rw abs_sub_comm,ring_nf,congr' 1,ring,},
+  simpa [q] using ha,
 end
 
 /-
@@ -32,16 +35,20 @@ theorem tendsto_add {a b : ℕ → ℝ} {t u : ℝ}
   (ha : tendsto a t) (hb : tendsto b u) :
   tendsto (λ n, a n + b n) (t + u) :=
 begin
-  sorry
+  rw tendsto at *,intros ε ε1,specialize ha (ε/2) (by linarith),specialize hb  (ε/2) (by linarith),
+  cases ha with Ba a,
+  cases hb with Bb b,use max Ba Bb,
+  intros n m, rw max_le_iff at m,cases m,specialize a n m_left,specialize b n m_right,
+  rw abs_lt at *,
+  split;
+  linarith,
 end
-
 /-- If `a(n)` tends to t and `b(n)` tends to `u` then `a(n) - b(n)`
 tends to `t - u`. -/
 theorem tendsto_sub {a b : ℕ → ℝ} {t u : ℝ}
   (ha : tendsto a t) (hb : tendsto b u) :
   tendsto (λ n, a n - b n) (t - u) :=
 begin
-  -- this one follows without too much trouble from earlier results.
-  sorry
+  simpa [sub_eq_add_neg] using tendsto_add ha (tendsto_neg hb),
 end
 

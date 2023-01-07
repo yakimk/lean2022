@@ -110,7 +110,7 @@ theorem tendsto_add_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ)
   tendsto (λ n, a n + c) (t + c) :=
 begin
   rw tendsto_def at h ⊢,
-  ring_nf,
+    ring_nf,
   exact h,
 end
 

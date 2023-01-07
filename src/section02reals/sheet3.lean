@@ -84,13 +84,13 @@ but it can't do anything with it if it's a variable.
 /-- The limit of the constant sequence with value 37 is 37. -/
 theorem tendsto_thirtyseven : tendsto (λ n, 37) 37 :=
 begin
-  sorry,
+  rw tendsto,intro ε,intro q,use 1,intro n,intro ineq,norm_num,exact q,
 end
 
 /-- The limit of the constant sequence with value `c` is `c`. -/
 theorem tendsto_const (c : ℝ) : tendsto (λ n, c) c :=
 begin
-  sorry,
+  rw tendsto,intro ε,intro q,use 1,intro n,intro i,ring_nf,norm_num,exact q,
 end
 
 /-- If `a(n)` tends to `t` then `a(n) + c` tends to `t + c` -/
@@ -98,21 +98,23 @@ theorem tendsto_add_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ)
   (h : tendsto a t) :
   tendsto (λ n, a n + c) (t + c) :=
 begin
-  sorry,
-  -- hints: make sure you know the maths proof!
-  -- use `cases` to deconstruct an `exists`
-  -- hypothesis, and `specialize` to specialize
-  -- a `forall` hypothesis to specific values.
-  -- Look up the explanations of these tactics in Part C
-  -- of the course notes. 
+  rw tendsto at h,rw tendsto,ring_nf,exact h,
 end
 
+theorem tendsto_sub_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ)
+  (h : tendsto a t) :
+  tendsto (λ n, a n - c) (t - c) :=
+begin
+  rw tendsto at h,rw tendsto,ring_nf,exact h,
+end
 
 /-- If `a(n)` tends to `t` then `-a(n)` tends to `-t`.  -/
 example {a : ℕ → ℝ} {t : ℝ} (ha : tendsto a t) :
   tendsto (λ n, - a n) (-t) :=
 begin
-  sorry,
+  rw tendsto,rw tendsto at ha,ring_nf,
+  intros ε q,specialize ha ε q, cases ha with B h,use B,intro a,intro ineq,specialize h a ineq,have b:
+  ∀ x :ℝ, |(-x)|=|x|,exact abs_neg,rw <-b,ring_nf,assumption, 
   -- Try this one. Where do you get stuck?
   -- The problem is that you probably don't
   -- know any API for the absolute value function |.|.

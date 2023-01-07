@@ -26,50 +26,60 @@ variables (P Q R S : Prop)
 
 example : P ↔ P :=
 begin
-  sorry
+refl,
 end
 
 example : (P ↔ Q) → (Q ↔ P) :=
 begin
-  sorry
+intro q,rw q,
 end
 
 example : (P ↔ Q) ↔ (Q ↔ P) :=
 begin
-  sorry
+  split,intro q, rw q,intro q,rw q,
 end
 
 example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) :=
 begin
-  sorry
+  intros q w,
+  rwa q, 
 end
 
 example : P ∧ Q ↔ Q ∧ P :=
 begin
-  sorry
+  split;
+  {rintro ⟨q, w⟩,exact ⟨w, q⟩
+  }
 end
 
 example : ((P ∧ Q) ∧ R) ↔ (P ∧ (Q ∧ R)) :=
 begin
-  sorry
+  split,intro q,cases q,cases q_left,split,assumption,split,assumption,assumption,
+  intro q,cases q,cases q_right,split,split,assumption,assumption,assumption,
 end
 
 example : P ↔ (P ∧ true) :=
 begin
-  sorry
+  split,
+  {intro q,split,assumption,triv,},
+  {intro q,cases q,assumption,}
 end
 
 example : false ↔ (P ∧ false) :=
 begin
-  sorry
+  split,
+  {intro q,split,by_contra,triv,triv,},
+  {intro q,cases q, assumption}
 end
 
 example : (P ↔ Q) → (R ↔ S) → (P ∧ R ↔ Q ∧ S) :=
 begin
-  sorry
+  intros q w,split,
+  {intro e,split,cases q,apply q_mp,cases e,assumption,cases w,apply w_mp,cases e,assumption,},
+  {intro e,split,cases q,apply q_mpr,cases e,assumption,cases w,cases e,apply w_mpr,assumption,},
 end
 
 example : ¬ (P ↔ ¬ P) :=
 begin
-  sorry,
+intro q,cases q,change (P->(P->false)) at q_mp,apply q_mp,apply q_mpr,change P ->false,intro e,apply q_mp,assumption,assumption,apply q_mpr,change P->false,intro q, apply q_mp,exact q,exact q,
 end
