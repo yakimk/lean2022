@@ -21,7 +21,7 @@ certain kind of problem.
 ## Definition of a group
 
 `group G` is already defined in `mathlib`, so let's define a new
-type `mygroup G`. Here `G : Type` is a type, and `mygroup G` is the type of
+type `mygroup G`. Here `G : Type` s a type, and `mygroup G` is the type of
 group structures on `G`.
 
 -/
@@ -87,8 +87,20 @@ lemma mul_eq_one_iff_eq_inv : a * b = 1 ↔ a⁻¹ = b :=
 begin
   split;
   intro q,
-  {have w: b*b⁻¹=1, rw mul_inv_self,have e: a*(b*b⁻¹)=(a*b)*b⁻¹,{rw mul_assoc,},
-sorry,},--rw [left_inv_eq_right_inv (a b)(q,w)] },
+  {
+    have w: a*a⁻¹=a*b,
+    calc
+      a*a⁻¹=1:by rw mul_inv_self
+...   =a*b:by rw q,
+calc
+  a⁻¹=1*a⁻¹: by rw one_mul
+... =a⁻¹*a*a⁻¹:by rw <- inv_mul_self
+... =a⁻¹*(a*a⁻¹): by rw <- mul_assoc
+... =a⁻¹*(a*b):by rw w
+... =a⁻¹*a*b: by rw <- mul_assoc
+... =1*b:by rw inv_mul_self
+...=b:by rw one_mul, 
+  },
   {cases q, rw <- mul_inv_self,}
 end
 

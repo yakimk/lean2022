@@ -58,7 +58,14 @@ first.
 lemma mul_left_cancel {a b c : G}(h: a * b = a * c) : 
  b=c :=
 begin
-  
+ calc
+      b=1*b:by rw one_mul 
+...     = a⁻¹*a*b: by rw inv_mul_self
+...     = a⁻¹*(a*b):by rw mul_assoc
+...     = a⁻¹*(a*c): by rw h
+...     =a⁻¹*a*c: by rw mul_assoc
+...      =1*c:by rw inv_mul_self
+...      =c:by rw one_mul,
 end
 
 lemma mul_one (a : G) : a * 1 = a :=
