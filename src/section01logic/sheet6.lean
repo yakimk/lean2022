@@ -28,53 +28,67 @@ variables (P Q R S : Prop)
 
 example : P → P ∨ Q :=
 begin
-  sorry
+  intro p, left, assumption,
 end
 
 example : Q → P ∨ Q :=
 begin
-  sorry,
+  intro p, right, assumption,
 end
 
 example : P ∨ Q → (P → R) → (Q → R) → R :=
 begin
-  sorry
+  intros imp1 imp2 imp3, cases imp1, apply imp2, assumption, apply imp3, assumption,
 end
 
 -- symmetry of `or`
 example : P ∨ Q → Q ∨ P :=
 begin
-  sorry
+  intro q, cases q, right, assumption, left, assumption
 end
 
 -- associativity of `or`
 example : (P ∨ Q) ∨ R ↔ P ∨ (Q ∨ R) :=
 begin
-  sorry,
+  split, intro imp, cases imp, cases imp, left, assumption, right, left, assumption, 
+  right, right, assumption,
+  intro imp, cases imp, left, left, assumption, cases imp,  left, right,  assumption, 
+  right,  assumption,
 end
 
 example : (P → R) → (Q → S) → P ∨ Q → R ∨ S :=
 begin
-  sorry,
+  intros imp1 imp2 h, cases h, left, apply imp1, assumption,
+  right, apply imp2, assumption
 end
 
 example : (P → Q) → P ∨ R → Q ∨ R :=
 begin
-  sorry,
+  intros imp1 imp2, cases imp2, left, apply imp1, assumption, right, assumption
 end
 
 example : (P ↔ R) → (Q ↔ S) → (P ∨ Q ↔ R ∨ S) :=
 begin
-  sorry,
+  intros q w, rw q, rw w, 
 end
 
 -- de Morgan's laws
 example : ¬ (P ∨ Q) ↔ ¬ P ∧ ¬ Q :=
 begin
-  sorry
+  split, intro q,
+  change (P ∨ Q ) -> false at q , change (P -> false) ∧ (Q -> false) ,
+  split, intro p, apply q, left, assumption,intro p, apply q, right, assumption,
+  intro q, change (P ∨ Q ) -> false, change (P -> false) ∧ (Q -> false) at q,
+  intro p, cases q, cases p, apply q_left, assumption, apply q_right, assumption,
 end
 
 example : ¬ (P ∧ Q) ↔ ¬ P ∨ ¬ Q :=
 begin
-  sorry
+  split, intro q,
+  by_cases hp : P, right, change Q->false, intro r, change  (P ∧ Q) -> false at q, apply q, exact ⟨hp, r⟩,
+  left, assumption,
+  intro q, change (P ∧ Q) -> false, intro w, change (P->false) ∨ (Q -> false) at q, cases q,by_cases hp : P,
+  apply q, assumption, cases w;{apply hp, assumption,},
+  {cases w, apply q, assumption,}
+
 end
